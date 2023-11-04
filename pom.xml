@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.banktransactionsgui/com.example.banktransactionsgui.HelloApplication
+                                com.example.banktransactionsgui/com.example.banktransactionsgui.TransactionManagerMain
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
