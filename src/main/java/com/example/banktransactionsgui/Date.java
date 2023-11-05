@@ -31,11 +31,8 @@ public class Date implements Comparable<Date> {
     public Date(String date){
         StringTokenizer part = new StringTokenizer(date,"/");
         this.month= Integer.parseInt(part.nextToken());
-//        System.out.println(this.month);
         this.day = Integer.parseInt(part.nextToken());
-//        System.out.println(this.day);
         this.year = Integer.parseInt(part.nextToken());
-//        System.out.println(this.year);
     }
 
     /**
