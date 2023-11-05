@@ -2,21 +2,31 @@ package com.example.banktransactionsgui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 
 public class TransactionManagerController {
 
-    @FXML
-    private TabPane mainTabPane;
+    private final AccountDatabase accountDatabase; // The Database structure to hold bank accounts
 
-    @FXML
-    private Tab openClose, depositWithdraw, accountDatabase;
+    public TransactionManagerController() {
+        this.accountDatabase = new AccountDatabase();
+    }
+    private static final int OPEN_INDICATION = 1;
+    private static final int CLOSE_INDICATION = 2;
+    private static final int DEPOSIT_INDICATION = 3;
+    private static final int WITHDRAW_INDICATION = 4;
+    private static final int  INVALID_DATE= 1;
+    private static final int  NO_TODAY_NO_FUTURE= 2;
 
     @FXML
     private TextArea textArea;
 
     @FXML
     private ToggleGroup AccountType1, AccountType2, Campus;
+
+    @FXML
+    private Group campuses;
 
     @FXML
     private TextField firstName1, lastName1, initialDeposit, firstName2, lastName2, amount;
@@ -69,12 +79,24 @@ public class TransactionManagerController {
 
     @FXML
     void enableLoyalty(ActionEvent event) {
-
+        loyalty.disableProperty().bind(
+                AccountType1.selectedToggleProperty().isNotEqualTo(moneyMarket1).and(
+                        AccountType1.selectedToggleProperty().isNotEqualTo(savings1)));
+        disableCampus(event);
     }
 
     @FXML
     void enableCampus(ActionEvent event) {
+        if (campuses.isDisabled()) {
+            campuses.setDisable(false);
+        }
+    }
 
+    @FXML
+    void disableCampus(ActionEvent event) {
+        if (!campuses.isDisabled()) {
+            campuses.setDisable(true);
+        }
     }
 
     @FXML
@@ -99,6 +121,7 @@ public class TransactionManagerController {
 
     @FXML
     void printSorted(ActionEvent event) {
+        accountDatabase.printSorted(textArea);
 
     }
 
@@ -109,11 +132,12 @@ public class TransactionManagerController {
 
     @FXML
     void printUpdatedBalances(ActionEvent event) {
-
+        accountDatabase.printUpdatedBalances(textArea);
     }
 
     @FXML
     void printFeesAndInterests(ActionEvent event) {
-
+        accountDatabase.printFeesAndInterests(textArea);
     }
+
 }

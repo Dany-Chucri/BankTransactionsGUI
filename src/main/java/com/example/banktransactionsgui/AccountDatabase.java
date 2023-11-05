@@ -1,5 +1,7 @@
 package com.example.banktransactionsgui;
 
+import javafx.scene.control.TextArea;
+
 import java.text.DecimalFormat;
 
 /**
@@ -198,17 +200,17 @@ public class AccountDatabase {
      * Prints out the accounts of the database, sorted by the account types.
      * Calls selectionSortAccounts() method
      */
-    public void printSorted() {
+    public void printSorted(TextArea textArea) {
         selectionSortAccounts();
         if (numAcct == 0){
-            System.out.println("Account Database is empty!");
+            textArea.appendText("Account Database is empty!\n");
             return;
         }
-        System.out.println("\n*Accounts sorted by account type and profile.");
+        textArea.appendText("\n*Accounts sorted by account type and profile.\n");
         for(int i = 0; i < numAcct; i++){
-            System.out.println(accounts[i]);
+            textArea.appendText(accounts[i].toString() + "\n");
         }
-        System.out.println("*end of list.\n");
+        textArea.appendText("*end of list.\n");
     } // sort by account type and profile, then print
 
     /**
@@ -260,13 +262,13 @@ public class AccountDatabase {
      * Responsible for displaying all account.
      * Will also display the calculated fees and monthly interests based on current balances
      */
-    public void printFeesAndInterests() {
+    public void printFeesAndInterests(TextArea textArea) {
         selectionSortAccounts();
         if (numAcct == 0){
-            System.out.println("Account Database is empty!");
+            textArea.appendText("Account Database is empty!\n");
             return;
         }
-        System.out.println("\n*list of accounts with fee and monthly interest");
+        textArea.appendText("\n*list of accounts with fee and monthly interest\n");
         for (int i = 0; i < numAcct; i++)
         {
             double fee = calcMonthlyFee(accounts[i]);
@@ -274,21 +276,21 @@ public class AccountDatabase {
             DecimalFormat formatter = (DecimalFormat) DecimalFormat.getCurrencyInstance();
             String feeString = formatter.format(fee);
             String interestString = formatter.format(interest);
-            System.out.println(accounts[i] + "::fee " + feeString + "::monthly interest " + interestString);
+            textArea.appendText(accounts[i].toString() + "::fee " + feeString + "::monthly interest " + interestString + "\n");
         }
-        System.out.println("*end of list.\n");
+        textArea.appendText("*end of list.\n");
     } //calculate interests/fees, then print
 
     /**
      * calculates and prints the updated balances of all accounts in the database after applying monthly fees and interests.
      */
-    public void printUpdatedBalances() {
+    public void printUpdatedBalances(TextArea textArea) {
         selectionSortAccounts();
         if (numAcct == 0){
-            System.out.println("Account Database is empty!");
+            textArea.appendText("Account Database is empty!\n");
             return;
         }
-        System.out.println("\n*list of accounts with fees and interests applied.");
+        textArea.appendText("\n*list of accounts with fees and interests applied.\n" );
         for (int i = 0; i < numAcct; i++)
         {
             double fee = calcMonthlyFee(accounts[i]);
@@ -297,8 +299,8 @@ public class AccountDatabase {
             if (accounts[i] instanceof MoneyMarket acc) {
                 acc.setWithdrawal(0);
             }
-            System.out.println(accounts[i]);
+            textArea.appendText(accounts[i].toString() + "\n");
         }
-        System.out.println("*end of list.\n");
+        textArea.appendText("*end of list.\n");
     } //apply the interests/fees, then print
 }
