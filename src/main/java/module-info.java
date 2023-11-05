@@ -3,6 +3,6 @@ module com.example.banktransactionsgui {
     requires javafx.fxml;
 
 
-    opens com.example.banktransactionsgui to javafx.fxml;
-    exports com.example.banktransactionsgui;
+    opens banktransactionsgui1 to javafx.fxml;
+    exports banktransactionsgui1;
 }

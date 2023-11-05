@@ -1,4 +1,4 @@
-package com.example.banktransactionsgui;
+package banktransactionsgui1;
 
 import javafx.scene.control.TextArea;
 

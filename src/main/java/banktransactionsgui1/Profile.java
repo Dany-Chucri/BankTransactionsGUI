@@ -1,4 +1,4 @@
-package com.example.banktransactionsgui;
+package banktransactionsgui1;
 /**
  represents a user profile with first name, last name, and date of birth attributes.
  Implements compareTo method to compare

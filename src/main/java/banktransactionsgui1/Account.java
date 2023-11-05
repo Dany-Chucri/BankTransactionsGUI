@@ -1,4 +1,4 @@
-package com.example.banktransactionsgui;
+package banktransactionsgui1;
 
 /**
  *Implements Comparable interface and represents the general type of account.

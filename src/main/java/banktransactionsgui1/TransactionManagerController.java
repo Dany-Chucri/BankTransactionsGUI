@@ -1,4 +1,4 @@
-package com.example.banktransactionsgui;
+package banktransactionsgui1;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -34,9 +34,6 @@ public class TransactionManagerController {
 
     @FXML
     private DatePicker dob1, dob2;
-
-    @FXML
-    private Button open, close, clear, deposit, withdraw, printAll, loadAccounts, printFeesInterests, printUpdate;
 
     @FXML
     private RadioButton checking1, checking2, savings1, savings2, collegeChecking1, collegeChecking2,
@@ -99,148 +96,152 @@ public class TransactionManagerController {
             campuses.setDisable(true);
         }
     }
+
     @FXML
     private void createChecking(Profile addProfile,double balance,int operation){
         Checking addAccount = new Checking(addProfile,balance);
         if(operation == OPEN_INDICATION){
             if (accountDatabase.open(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) opened.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) opened.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is already in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is already in the database.\n");
         } else if (operation==CLOSE_INDICATION){
             if (accountDatabase.close(addAccount)) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) has been closed.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) has been closed.\n");
             }
             else
-                System.out.println(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.");
+                System.out.println(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.\n");
         } else if (operation==DEPOSIT_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.\n");
             } else {
                 accountDatabase.deposit(addAccount);
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) Deposit - balance updated.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) Deposit - balance updated.\n");
             }
         } else if (operation==WITHDRAW_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.\n");
             }
             else {
                 if (accountDatabase.withdraw(addAccount))
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) Withdraw - balance updated.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) Withdraw - balance updated.\n");
                 else
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) Withdraw - insufficient fund.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) Withdraw - insufficient fund.\n");
             }
         } else {
-            textArea.appendText("The account is already on the database.");
+            textArea.appendText("\n");
         }
     }
+
     @FXML
     private void createSavings(Profile addProfile,double balance, boolean loyal,int operation){
-//        boolean loyalKey = loyal == 1;
         Savings addAccount = new Savings(addProfile, balance, loyal);
         if(operation == OPEN_INDICATION){
             if(accountDatabase.open(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) opened.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) opened.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is already in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is already in the database.\n");
         } else if(operation==CLOSE_INDICATION){
             if(accountDatabase.close(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) has been closed.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) has been closed.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is not in the database.\n");
         } else if (operation==DEPOSIT_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is not in the database.\n");
             } else {
                 accountDatabase.deposit(addAccount);
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) Deposit - balance updated.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) Deposit - balance updated.\n");
             }
         } else if (operation==WITHDRAW_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) is not in the database.\n");
             }
             else {
                 if (accountDatabase.withdraw(addAccount))
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) Withdraw - balance updated.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) Withdraw - balance updated.\n");
                 else
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) Withdraw - insufficient fund.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(S) Withdraw - insufficient fund.\n");
             }
         } else{
-            textArea.appendText("The account is already on the database.");
+            textArea.appendText("The account is already on the database.\n");
         }
     }
+
     @FXML
     private void createCollegeChecking(Profile addProfile,double balance, Campus code,int operation){
         CollegeChecking addAccount = new CollegeChecking(addProfile,balance,code);
         if(operation==OPEN_INDICATION){
             if(accountDatabase.open(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) opened.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) opened.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is already in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is already in the database.\n");
         } else if(operation==CLOSE_INDICATION){
             if(accountDatabase.close(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) has been closed.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) has been closed.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is not in the database.\n");
         } else if (operation==DEPOSIT_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is not in the database.\n");
 
             } else {
                 accountDatabase.deposit(addAccount);
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) Deposit - balance updated.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) Deposit - balance updated.\n");
             }
         } else if (operation==WITHDRAW_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) is not in the database.\n");
             }
             else {
                 if (accountDatabase.withdraw(addAccount))
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) Withdraw - balance updated.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) Withdraw - balance updated.\n");
                 else
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) Withdraw - insufficient fund.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(CC) Withdraw - insufficient fund.\n");
             }
         } else{
-            textArea.appendText("The account is already on the database.");
+            textArea.appendText("The account is already on the database.\n");
         }
     }
+
     @FXML
     private void createMoneyMarket(Profile addProfile,double balance,int operation){
         MoneyMarket addAccount = new MoneyMarket(addProfile,balance);
         if( operation == OPEN_INDICATION ){
             if (balance < 2000) {
-                textArea.appendText("Minimum of $2000 to open a Money Market account.");
+                textArea.appendText("Minimum of $2000 to open a Money Market account.\n");
             }
             else if(accountDatabase.open(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) opened.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) opened.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is already in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is already in the database.\n");
         } else if(operation==CLOSE_INDICATION){
             if(accountDatabase.close(addAccount))
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) has been closed.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) has been closed.\n");
             else
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is not in the database.\n");
         } else if (operation==DEPOSIT_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is not in the database.\n");
             } else {
                 accountDatabase.deposit(addAccount);
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) Deposit - balance updated.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) Deposit - balance updated.\n");
             }
         } else if (operation==WITHDRAW_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
-                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is not in the database.");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) is not in the database.\n");
             }
             else {
                 if (accountDatabase.withdraw(addAccount))
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) Withdraw - balance updated.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) Withdraw - balance updated.\n");
                 else
-                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) Withdraw - insufficient fund.");
+                    textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(MM) Withdraw - insufficient fund.\n");
             }
         } else{
-            textArea.appendText("The account is already on the database.");
+            textArea.appendText("The account is already on the database.\n");
         }
     }
+
     @FXML
     void open(ActionEvent event) {
         String firstName = firstName1.getText();
@@ -254,28 +255,25 @@ public class TransactionManagerController {
         } else if (savings1.isSelected()) {
             boolean isLoyal = loyalty.isSelected();
             createSavings(new Profile(firstName, lastName, dob),initialDeposit,isLoyal,OPEN_INDICATION);
-//            newAccount = new Savings(new Profile(firstName, lastName, dob), initialDeposit, isLoyal);
         } else if (collegeChecking1.isSelected()) {
             RadioButton selectedRadioButton = (RadioButton) Campus.getSelectedToggle();
             String campusText = selectedRadioButton.getText();
-            com.example.banktransactionsgui.Campus campus;
-            if (campusText.equals(com.example.banktransactionsgui.Campus.NEW_BRUNSWICK.toString())) {
-                campus = com.example.banktransactionsgui.Campus.NEW_BRUNSWICK;
-            } else if (campusText.equals(com.example.banktransactionsgui.Campus.NEWARK.toString())) {
-                campus = com.example.banktransactionsgui.Campus.NEWARK;
-            } else if (campusText.equals(com.example.banktransactionsgui.Campus.CAMDEN.toString())) {
-                campus = com.example.banktransactionsgui.Campus.CAMDEN;
+            banktransactionsgui1.Campus campus;
+            if (campusText.equals(banktransactionsgui1.Campus.NEW_BRUNSWICK.toString())) {
+                campus = banktransactionsgui1.Campus.NEW_BRUNSWICK;
+            } else if (campusText.equals(banktransactionsgui1.Campus.NEWARK.toString())) {
+                campus = banktransactionsgui1.Campus.NEWARK;
+            } else if (campusText.equals(banktransactionsgui1.Campus.CAMDEN.toString())) {
+                campus = banktransactionsgui1.Campus.CAMDEN;
             } else {
                 campus = null;
             }
             createCollegeChecking(new Profile(firstName, lastName, dob),initialDeposit,campus,OPEN_INDICATION);
-//            newAccount = new CollegeChecking(new Profile(firstName, lastName, dob), initialDeposit, campus);
         } else if (moneyMarket1.isSelected()) {
             createMoneyMarket(new Profile(firstName, lastName, dob),initialDeposit,OPEN_INDICATION);
-//                newAccount = new MoneyMarket(new Profile(firstName, lastName, dob), initialDeposit);
         }
-//        textArea.appendText("New account opened:\n" + newAccount.toString() + "\n");
     }
+
     @FXML
     void close(ActionEvent event) {
         String firstName = firstName1.getText();
@@ -287,7 +285,7 @@ public class TransactionManagerController {
         } else if (savings1.isSelected()) {
             createSavings(new Profile(firstName, lastName, dob),0,false,CLOSE_INDICATION);
         } else if (collegeChecking1.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),0,com.example.banktransactionsgui.Campus.NEW_BRUNSWICK,CLOSE_INDICATION);
+            createCollegeChecking(new Profile(firstName, lastName, dob),0, banktransactionsgui1.Campus.NEW_BRUNSWICK,CLOSE_INDICATION);
         } else if (moneyMarket1.isSelected()) {
             createMoneyMarket(new Profile(firstName, lastName, dob),0,CLOSE_INDICATION);
         }
@@ -300,13 +298,13 @@ public class TransactionManagerController {
         String depositAmountTxt = amount.getText();
         double depositAmount = Double.parseDouble(depositAmountTxt);
 
-        if (checking1.isSelected()) {
+        if (checking2.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), depositAmount, DEPOSIT_INDICATION);
-        } else if (savings1.isSelected()) {
+        } else if (savings2.isSelected()) {
             createSavings(new Profile(firstName, lastName, dob),depositAmount,false,DEPOSIT_INDICATION);
-        } else if (collegeChecking1.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),depositAmount,com.example.banktransactionsgui.Campus.NEW_BRUNSWICK,DEPOSIT_INDICATION);
-        } else if (moneyMarket1.isSelected()) {
+        } else if (collegeChecking2.isSelected()) {
+            createCollegeChecking(new Profile(firstName, lastName, dob),depositAmount, banktransactionsgui1.Campus.NEW_BRUNSWICK,DEPOSIT_INDICATION);
+        } else if (moneyMarket2.isSelected()) {
             createMoneyMarket(new Profile(firstName, lastName, dob),depositAmount,DEPOSIT_INDICATION);
         }
     }
@@ -318,13 +316,13 @@ public class TransactionManagerController {
         String withdrawAmtTxt = amount.getText();
         double withdrawAmt = Double.parseDouble(withdrawAmtTxt);
 
-        if (checking1.isSelected()) {
+        if (checking2.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), withdrawAmt, WITHDRAW_INDICATION);
-        } else if (savings1.isSelected()) {
+        } else if (savings2.isSelected()) {
             createSavings(new Profile(firstName, lastName, dob),withdrawAmt,false,WITHDRAW_INDICATION);
-        } else if (collegeChecking1.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),withdrawAmt,com.example.banktransactionsgui.Campus.NEW_BRUNSWICK,WITHDRAW_INDICATION);
-        } else if (moneyMarket1.isSelected()) {
+        } else if (collegeChecking2.isSelected()) {
+            createCollegeChecking(new Profile(firstName, lastName, dob),withdrawAmt, banktransactionsgui1.Campus.NEW_BRUNSWICK,WITHDRAW_INDICATION);
+        } else if (moneyMarket2.isSelected()) {
             createMoneyMarket(new Profile(firstName, lastName, dob),withdrawAmt,WITHDRAW_INDICATION);
         }
     }
