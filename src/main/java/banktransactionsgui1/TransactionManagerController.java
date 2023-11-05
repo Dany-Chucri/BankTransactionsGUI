@@ -259,11 +259,11 @@ public class TransactionManagerController {
             RadioButton selectedRadioButton = (RadioButton) Campus.getSelectedToggle();
             String campusText = selectedRadioButton.getText();
             banktransactionsgui1.Campus campus;
-            if (campusText.equals(banktransactionsgui1.Campus.NEW_BRUNSWICK.toString())) {
+            if (campusText.equals("NB")) {
                 campus = banktransactionsgui1.Campus.NEW_BRUNSWICK;
-            } else if (campusText.equals(banktransactionsgui1.Campus.NEWARK.toString())) {
+            } else if (campusText.equals("Newark")) {
                 campus = banktransactionsgui1.Campus.NEWARK;
-            } else if (campusText.equals(banktransactionsgui1.Campus.CAMDEN.toString())) {
+            } else if (campusText.equals("Camden")) {
                 campus = banktransactionsgui1.Campus.CAMDEN;
             } else {
                 campus = null;
