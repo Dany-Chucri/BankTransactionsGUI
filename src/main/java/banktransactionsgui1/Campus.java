@@ -1,4 +1,4 @@
-package com.example.banktransactionsgui;
+package banktransactionsgui1;
 
 /**
  Enum class representing a campus.
