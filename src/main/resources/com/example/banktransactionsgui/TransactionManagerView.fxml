@@ -94,13 +94,13 @@
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <RadioButton fx:id="checking1" mnemonicParsing="false" text="Checking">
+                                                <RadioButton fx:id="checking1" mnemonicParsing="false" onAction="#disableCampus" text="Checking">
                                                     <GridPane.margin>
                                                         <Insets left="20.0" />
                                                     </GridPane.margin>
-                                       <toggleGroup>
+                                                    <toggleGroup>
                                                         <ToggleGroup fx:id="AccountType1" />
-                                       </toggleGroup>
+                                                    </toggleGroup>
                                                 </RadioButton>
                                                 <RadioButton fx:id="savings1" mnemonicParsing="false" onAction="#enableLoyalty" text="Savings" toggleGroup="$AccountType1" GridPane.rowIndex="1">
                                                     <GridPane.margin>
@@ -133,7 +133,7 @@
                                             <children>
                                                 <VBox prefHeight="200.0" prefWidth="100.0">
                                                     <children>
-                                                        <Group disable="true">
+                                                        <Group fx:id="campuses" disable="true">
                                                             <children>
                                                                 <RadioButton fx:id="camden" mnemonicParsing="false" text="Camden">
                                                                     <padding>
@@ -207,11 +207,11 @@
                                         <RowConstraints maxHeight="258.0" minHeight="10.0" prefHeight="126.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                              <Button fx:id="clear2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#clearSecond" prefHeight="30.0" prefWidth="130.0" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="5">
-                                 <GridPane.margin>
-                                    <Insets bottom="11.0" left="20.0" />
-                                 </GridPane.margin>
-                              </Button>
+                                        <Button fx:id="clear2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#clearSecond" prefHeight="30.0" prefWidth="130.0" text="Clear" GridPane.columnIndex="2" GridPane.rowIndex="5">
+                                            <GridPane.margin>
+                                                <Insets bottom="11.0" left="20.0" />
+                                            </GridPane.margin>
+                                        </Button>
                                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="212.0" text="First Name" textAlignment="RIGHT">
                                             <GridPane.margin>
                                                 <Insets right="10.0" />
@@ -255,9 +255,9 @@
                                                     <GridPane.margin>
                                                         <Insets left="20.0" />
                                                     </GridPane.margin>
-                                       <toggleGroup>
-                                          <ToggleGroup fx:id="AccountType2" />
-                                       </toggleGroup>
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="AccountType2" />
+                                                    </toggleGroup>
                                                 </RadioButton>
                                                 <RadioButton fx:id="savings2" mnemonicParsing="false" text="Savings" toggleGroup="$AccountType2" GridPane.rowIndex="1">
                                                     <GridPane.margin>
