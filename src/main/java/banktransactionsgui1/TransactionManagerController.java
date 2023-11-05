@@ -259,6 +259,24 @@ public class TransactionManagerController {
         return addDate;
     }
     @FXML
+    private double checkBalance(String token, String type) {
+        double balanceAmount;
+        try {
+            balanceAmount = Double.parseDouble(token);
+        } catch (Exception e) {
+            textArea.appendText("Not a valid amount.\n");
+            return -1;
+        }
+        if (balanceAmount <= 0){
+            String s;
+            if (type.equals("Deposit")) s = "Deposit";
+            else s = "Withdraw";
+            textArea.appendText(s + " - amount cannot be 0 or negative.\n");
+            return -1;
+        }
+        return balanceAmount;
+    }
+    @FXML
     void open(ActionEvent event) {
         String firstName = firstName1.getText();
         String lastName = lastName1.getText();
@@ -327,6 +345,9 @@ public class TransactionManagerController {
             textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
             return;
         }
+        depositAmount = checkBalance(depositAmountTxt, "Deposit");
+        if (depositAmount <= 0) return;
+
         if (checking2.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), depositAmount, DEPOSIT_INDICATION);
         } else if (savings2.isSelected()) {
@@ -348,6 +369,8 @@ public class TransactionManagerController {
             textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
             return;
         }
+        withdrawAmt = checkBalance(withdrawAmtTxt, "Withdraw");
+        if (withdrawAmt <= 0) return;
         if (checking2.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), withdrawAmt, WITHDRAW_INDICATION);
         } else if (savings2.isSelected()) {
