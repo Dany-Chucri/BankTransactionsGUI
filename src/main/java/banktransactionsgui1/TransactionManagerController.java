@@ -1,9 +1,14 @@
 package banktransactionsgui1;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class TransactionManagerController {
 
@@ -43,7 +48,7 @@ public class TransactionManagerController {
     private CheckBox loyalty;
 
     @FXML
-    void clearFirst(ActionEvent event) {
+    void clearFirst() {
         firstName1.clear();
         lastName1.clear();
         dob1.getEditor().clear();
@@ -59,7 +64,7 @@ public class TransactionManagerController {
     }
 
     @FXML
-    void clearSecond(ActionEvent event) {
+    void clearSecond() {
         firstName2.clear();
         lastName2.clear();
         dob2.getEditor().clear();
@@ -71,27 +76,22 @@ public class TransactionManagerController {
     }
 
     @FXML
-    void dateValidity(ActionEvent event) {
-
-    }
-
-    @FXML
-    void enableLoyalty(ActionEvent event) {
+    void enableLoyalty() {
         loyalty.disableProperty().bind(
                 AccountType1.selectedToggleProperty().isNotEqualTo(moneyMarket1).and(
                         AccountType1.selectedToggleProperty().isNotEqualTo(savings1)));
-        disableCampus(event);
+        disableCampus();
     }
 
     @FXML
-    void enableCampus(ActionEvent event) {
+    void enableCampus() {
         if (campuses.isDisabled()) {
             campuses.setDisable(false);
         }
     }
 
     @FXML
-    void disableCampus(ActionEvent event) {
+    void disableCampus() {
         if (!campuses.isDisabled()) {
             campuses.setDisable(true);
         }
@@ -134,7 +134,7 @@ public class TransactionManagerController {
     }
 
     @FXML
-    private void createSavings(Profile addProfile,double balance, boolean loyal,int operation){
+    private void createSavings(Profile addProfile,double balance, boolean loyal, int operation){
         Savings addAccount = new Savings(addProfile, balance, loyal);
         if(operation == OPEN_INDICATION){
             if(accountDatabase.open(addAccount))
@@ -242,43 +242,68 @@ public class TransactionManagerController {
         }
     }
 
+    private double checkBalance(String token, String type) {
+        double balanceAmount;
+        try {
+            balanceAmount = Double.parseDouble(token);
+        } catch (Exception e) {
+            textArea.appendText("Not a valid amount.\n");
+            return -1;
+        }
+        if (balanceAmount <= 0){
+            String s;
+            if (type.equals("Deposit")) s = "Deposit";
+            else s = "Withdraw";
+            textArea.appendText(s + " - amount cannot be 0 or negative.\n");
+            return -1;
+        }
+        return balanceAmount;
+    }
+
     @FXML
-    void open(ActionEvent event) {
+    void open() {
         String firstName = firstName1.getText();
         String lastName = lastName1.getText();
-        Date dob = new Date(dob1.getEditor().getText());
+        String dob = dob1.getEditor().getText();
         String initialDepositText = initialDeposit.getText();
         double initialDeposit = Double.parseDouble(initialDepositText);
-
+        int indication = 0;
+        if(collegeChecking1.isSelected()) { indication = 2;}
+        Date dateInput = createDate(dob, indication);
+        if (dateInput == null) {return;}
+        if (initialDeposit <= 0) {
+            textArea.appendText("Initial deposit cannot be 0 or negative.\n");
+            return;
+        }
         if (checking1.isSelected()) {
-            createChecking(new Profile(firstName, lastName, dob), initialDeposit, OPEN_INDICATION);
+            createChecking(new Profile(firstName, lastName, dateInput), initialDeposit, OPEN_INDICATION);
         } else if (savings1.isSelected()) {
             boolean isLoyal = loyalty.isSelected();
-            createSavings(new Profile(firstName, lastName, dob),initialDeposit,isLoyal,OPEN_INDICATION);
+            createSavings(new Profile(firstName, lastName, dateInput),initialDeposit,isLoyal,OPEN_INDICATION);
         } else if (collegeChecking1.isSelected()) {
             RadioButton selectedRadioButton = (RadioButton) Campus.getSelectedToggle();
             String campusText = selectedRadioButton.getText();
-            banktransactionsgui1.Campus campus;
-            if (campusText.equals("NB")) {
-                campus = banktransactionsgui1.Campus.NEW_BRUNSWICK;
-            } else if (campusText.equals("Newark")) {
-                campus = banktransactionsgui1.Campus.NEWARK;
-            } else if (campusText.equals("Camden")) {
-                campus = banktransactionsgui1.Campus.CAMDEN;
-            } else {
-                campus = null;
-            }
-            createCollegeChecking(new Profile(firstName, lastName, dob),initialDeposit,campus,OPEN_INDICATION);
+            banktransactionsgui1.Campus campus = switch (campusText) {
+                case "NB" -> banktransactionsgui1.Campus.NEW_BRUNSWICK;
+                case "Newark" -> banktransactionsgui1.Campus.NEWARK;
+                case "Camden" -> banktransactionsgui1.Campus.CAMDEN;
+                default -> null;
+            };
+            createCollegeChecking(new Profile(firstName, lastName, dateInput),initialDeposit,campus,OPEN_INDICATION);
         } else if (moneyMarket1.isSelected()) {
-            createMoneyMarket(new Profile(firstName, lastName, dob),initialDeposit,OPEN_INDICATION);
+            createMoneyMarket(new Profile(firstName, lastName, dateInput),initialDeposit,OPEN_INDICATION);
         }
     }
 
     @FXML
-    void close(ActionEvent event) {
+    void close() {
         String firstName = firstName1.getText();
         String lastName = lastName1.getText();
         Date dob = new Date(dob1.getEditor().getText());
+        if (dob.isValid() == 2) {
+            textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
+            return;
+        }
 
         if (checking1.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), 0, CLOSE_INDICATION);
@@ -290,31 +315,44 @@ public class TransactionManagerController {
             createMoneyMarket(new Profile(firstName, lastName, dob),0,CLOSE_INDICATION);
         }
     }
+
     @FXML
-    void deposit(ActionEvent event) {
+    void deposit() {
         String firstName = firstName2.getText();
         String lastName = lastName2.getText();
         Date dob = new Date(dob2.getEditor().getText());
         String depositAmountTxt = amount.getText();
-        double depositAmount = Double.parseDouble(depositAmountTxt);
+        if (dob.isValid() == 2) {
+            textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
+            return;
+        }
+        double depositAmount = checkBalance(depositAmountTxt, "Deposit");
+        if (depositAmount <= 0) return;
 
         if (checking2.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), depositAmount, DEPOSIT_INDICATION);
         } else if (savings2.isSelected()) {
-            createSavings(new Profile(firstName, lastName, dob),depositAmount,false,DEPOSIT_INDICATION);
+            createSavings(new Profile(firstName, lastName, dob),depositAmount,false, DEPOSIT_INDICATION);
         } else if (collegeChecking2.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),depositAmount, banktransactionsgui1.Campus.NEW_BRUNSWICK,DEPOSIT_INDICATION);
+            createCollegeChecking(new Profile(firstName, lastName, dob),depositAmount, banktransactionsgui1.Campus.NEW_BRUNSWICK, DEPOSIT_INDICATION);
         } else if (moneyMarket2.isSelected()) {
-            createMoneyMarket(new Profile(firstName, lastName, dob),depositAmount,DEPOSIT_INDICATION);
+            createMoneyMarket(new Profile(firstName, lastName, dob),depositAmount, DEPOSIT_INDICATION);
         }
     }
+
     @FXML
-    void withdraw(ActionEvent event) {
+    void withdraw() {
         String firstName = firstName2.getText();
         String lastName = lastName2.getText();
         Date dob = new Date(dob2.getEditor().getText());
         String withdrawAmtTxt = amount.getText();
-        double withdrawAmt = Double.parseDouble(withdrawAmtTxt);
+
+        if (dob.isValid() == 2) {
+            textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
+            return;
+        }
+        double withdrawAmt = checkBalance(withdrawAmtTxt, "Withdraw");
+        if (withdrawAmt <= 0) return;
 
         if (checking2.isSelected()) {
             createChecking(new Profile(firstName, lastName, dob), withdrawAmt, WITHDRAW_INDICATION);
@@ -328,23 +366,110 @@ public class TransactionManagerController {
     }
 
     @FXML
-    void printSorted(ActionEvent event) {
+    void loadAccountsFromFile() throws FileNotFoundException {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open Source File for Importing Account Set");
+        chooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        Stage stage = new Stage();
+        File sourceFile = chooser.showOpenDialog(stage); //get the reference of the source file
+        if (sourceFile == null) {
+            return;
+        }
+        Scanner S = new Scanner(sourceFile);
+        while(S.hasNextLine()) {
+            String fullCommand = S.nextLine().trim();   //read + trim
+            if(fullCommand.isEmpty())   //blank line
+                continue;
+            String[] token = fullCommand.split(",");
+            int key = bankType(token[0]);
+            Date dateInput = createDate(token[3], key);
+            if (dateInput == null) return;
+            Profile addProfile = new Profile(token[1], token[2], dateInput);
+            loaderOpener(token, key, addProfile);
+        }
+    }
+
+    private void loaderOpener(String[] token, int key, Profile addProfile) {
+        double balance;
+        try { balance = Double.parseDouble(token[4]);
+        } catch (Exception e) {
+            System.out.println("Not a valid amount.");
+            return;
+        }
+        if (balance <= 0) {
+            System.out.println("Initial deposit cannot be 0 or negative.");
+            return;
+        }
+        if (key == 1)
+            createChecking(addProfile, balance, OPEN_INDICATION);
+        if (key == 2) {
+            String phraseLoc = checkCampusCode(Integer.parseInt(token[5]));
+            if (phraseLoc.equals("INVALID")) {
+                System.out.println("Invalid campus code.");
+            }
+            else createCollegeChecking(addProfile, balance, banktransactionsgui1.Campus.valueOf(phraseLoc), OPEN_INDICATION);
+        }
+        else if (key == 3)
+            createMoneyMarket(addProfile, balance, OPEN_INDICATION);
+        else if (key == 4)
+            createSavings(addProfile, balance, !(Integer.parseInt(token[5]) == 0), OPEN_INDICATION);
+    }
+
+    private int bankType(String entry) {
+        return switch (entry) {
+            case "C" -> 1;
+            case "CC" -> 2;
+            case "MM" -> 3;
+            case "S" -> 4;
+            default -> 5;
+        };
+    }
+
+    private String checkCampusCode(int campCode){
+        if(campCode==0){
+            return "NEW_BRUNSWICK";
+        } else if (campCode==1) {
+            return "NEWARK";
+        } else if (campCode==2) {
+            return "CAMDEN";
+        }
+        else{
+            return "INVALID";
+        }
+    }
+
+    private Date createDate(String date,int collegeIndication){
+        Date addDate = new Date(date);
+        if(addDate.isValid() == INVALID_DATE){
+            textArea.appendText("DOB invalid: " + date + " not a valid calendar date!\n");
+            return null;
+        } else if (addDate.isValid() == NO_TODAY_NO_FUTURE) {
+            textArea.appendText("DOB invalid: " + date + " cannot be today or a future day.\n");
+            return null;
+        } else if(collegeIndication == 2 && addDate.checkAge() >= 24){
+            textArea.appendText("DOB invalid: " + date + " over 24.\n");
+            return null;
+        } else if (addDate.checkAge()<16) {
+            textArea.appendText("DOB invalid: " + date + " under 16.\n");
+            return null;
+        }
+        return addDate;
+    }
+
+    @FXML
+    void printSorted() {
         accountDatabase.printSorted(textArea);
 
     }
 
     @FXML
-    void loadAccountsFromFile(ActionEvent event) {
-
-    }
-
-    @FXML
-    void printUpdatedBalances(ActionEvent event) {
+    void printUpdatedBalances() {
         accountDatabase.printUpdatedBalances(textArea);
     }
 
     @FXML
-    void printFeesAndInterests(ActionEvent event) {
+    void printFeesAndInterests() {
         accountDatabase.printFeesAndInterests(textArea);
     }
 

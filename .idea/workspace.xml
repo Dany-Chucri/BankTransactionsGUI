@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="061fa8e1-bf10-47d5-b4f4-a716bdc99969" name="Changes" comment="Fixes and bugs, restructure">
+    <list default="true" id="061fa8e1-bf10-47d5-b4f4-a716bdc99969" name="Changes" comment="Fixes and bugs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/banktransactionsgui1/TransactionManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/banktransactionsgui1/TransactionManagerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/banktransactionsgui1/TransactionManagerView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/banktransactionsgui1/TransactionManagerView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,7 +115,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699214885820</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Fixes and bugs">
+      <option name="closed" value="true" />
+      <created>1699215572588</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1699215572588</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -126,14 +135,15 @@
     <MESSAGE value="Added sample event handlers and implemented simple clear handlers" />
     <MESSAGE value="More methods, including prints, implemented" />
     <MESSAGE value="Fixes and bugs, restructure" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes and bugs, restructure" />
+    <MESSAGE value="Fixes and bugs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixes and bugs" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/banktransactionsgui1/TransactionManagerController.java</url>
-          <line>294</line>
+          <line>320</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

@@ -82,7 +82,7 @@
                                 <Insets right="10.0"/>
                             </GridPane.margin>
                         </Label>
-                        <DatePicker fx:id="dob1" onAction="#dateValidity" GridPane.columnIndex="1"
+                        <DatePicker fx:id="dob1" GridPane.columnIndex="1"
                                     GridPane.rowIndex="2"/>
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0"
                                prefWidth="177.0" text="Initial Deposit" textAlignment="RIGHT"
@@ -264,7 +264,7 @@
                                 <Insets right="10.0"/>
                             </GridPane.margin>
                         </Label>
-                        <DatePicker fx:id="dob2" onAction="#dateValidity" GridPane.columnIndex="1"
+                        <DatePicker fx:id="dob2" GridPane.columnIndex="1"
                                     GridPane.rowIndex="2"/>
                         <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="17.0"
                                prefWidth="221.0" text="Amount" textAlignment="RIGHT" GridPane.rowIndex="4">
