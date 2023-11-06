@@ -1,5 +1,6 @@
 package banktransactionsgui1;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.*;
@@ -60,7 +61,6 @@ public class TransactionManagerController {
         camden.setDisable(true);
         nb.setDisable(true);
         newark.setDisable(true);
-        loyalty.setDisable(true);
     }
 
     @FXML
@@ -77,9 +77,17 @@ public class TransactionManagerController {
 
     @FXML
     void enableLoyalty() {
-        loyalty.disableProperty().bind(
-                AccountType1.selectedToggleProperty().isNotEqualTo(moneyMarket1).and(
-                        AccountType1.selectedToggleProperty().isNotEqualTo(savings1)));
+        if (loyalty.isDisabled()) {
+            loyalty.setDisable(false);
+        }
+        disableCampus();
+    }
+
+    @FXML
+    void disableLoyalty() {
+        if (!loyalty.isDisabled()) {
+            loyalty.setDisable(true);
+        }
         disableCampus();
     }
 
@@ -110,7 +118,7 @@ public class TransactionManagerController {
                 textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) has been closed.\n");
             }
             else
-                System.out.println(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.\n");
+                textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.\n");
         } else if (operation==DEPOSIT_INDICATION) {
             if (!(accountDatabase.contains(addAccount))) {
                 textArea.appendText(addProfile.getFname() + " " + addProfile.getLname() + " " + addProfile.getDOB() + "(C) is not in the database.\n");
@@ -262,11 +270,13 @@ public class TransactionManagerController {
 
     @FXML
     void open() {
-        String firstName = firstName1.getText();
-        String lastName = lastName1.getText();
-        String dob = dob1.getEditor().getText();
-        String initialDepositText = initialDeposit.getText();
-        double initialDeposit = Double.parseDouble(initialDepositText);
+        String firstName = firstName1.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for opening an account.\n"); return;}
+        String lastName = lastName1.getText(); if (lastName.isEmpty()) {textArea.appendText("Missing data for opening an account.\n"); return;}
+        String dob = dob1.getEditor().getText(); if (dob.isEmpty()) {textArea.appendText("Missing data for opening an account.\n"); return;}
+        String initialDepositText = initialDeposit.getText(); if (initialDepositText.isEmpty()) {textArea.appendText("Missing data for opening an account.\n"); return;}
+        double initialDeposit;
+        try { initialDeposit = Double.parseDouble(initialDepositText); }
+        catch (Exception e) {textArea.appendText("Not a valid amount.\n"); return;}
         int indication = 0;
         if(collegeChecking1.isSelected()) { indication = 2;}
         Date dateInput = createDate(dob, indication);
@@ -293,75 +303,84 @@ public class TransactionManagerController {
         } else if (moneyMarket1.isSelected()) {
             createMoneyMarket(new Profile(firstName, lastName, dateInput),initialDeposit,OPEN_INDICATION);
         }
+        else {
+            textArea.appendText("Missing data for opening an account.\n");
+        }
     }
 
     @FXML
     void close() {
-        String firstName = firstName1.getText();
-        String lastName = lastName1.getText();
-        Date dob = new Date(dob1.getEditor().getText());
-        if (dob.isValid() == 2) {
-            textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
-            return;
-        }
+        String firstName = firstName1.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for closing an account.\n"); return;}
+        String lastName = lastName1.getText(); if (lastName.isEmpty()) {textArea.appendText("Missing data for closing an account.\n"); return;}
+        int indication = 0;
+        String dob = dob1.getEditor().getText(); if (dob.isEmpty()) {textArea.appendText("Missing data for closing an account.\n"); return;}
+        Date dateInput = createDate(dob, indication);
+        if (dateInput == null) {return;}
 
         if (checking1.isSelected()) {
-            createChecking(new Profile(firstName, lastName, dob), 0, CLOSE_INDICATION);
+            createChecking(new Profile(firstName, lastName, dateInput), 0, CLOSE_INDICATION);
         } else if (savings1.isSelected()) {
-            createSavings(new Profile(firstName, lastName, dob),0,false,CLOSE_INDICATION);
+            createSavings(new Profile(firstName, lastName, dateInput),0,false,CLOSE_INDICATION);
         } else if (collegeChecking1.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),0, banktransactionsgui1.Campus.NEW_BRUNSWICK,CLOSE_INDICATION);
+            createCollegeChecking(new Profile(firstName, lastName, dateInput),0, banktransactionsgui1.Campus.NEW_BRUNSWICK,CLOSE_INDICATION);
         } else if (moneyMarket1.isSelected()) {
-            createMoneyMarket(new Profile(firstName, lastName, dob),0,CLOSE_INDICATION);
+            createMoneyMarket(new Profile(firstName, lastName, dateInput),0,CLOSE_INDICATION);
+        }
+        else {
+            textArea.appendText("Missing data for closing an account.\n");
         }
     }
 
     @FXML
     void deposit() {
-        String firstName = firstName2.getText();
-        String lastName = lastName2.getText();
-        Date dob = new Date(dob2.getEditor().getText());
-        String depositAmountTxt = amount.getText();
-        if (dob.isValid() == 2) {
-            textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
-            return;
-        }
+        String firstName = firstName2.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for depositing into an account.\n"); return;}
+        String lastName = lastName2.getText(); if (lastName.isEmpty()) {textArea.appendText("Missing data for depositing into an account.\n"); return;}
+        int indication = 0;
+        String dob = dob2.getEditor().getText(); if (dob.isEmpty()) {textArea.appendText("Missing data for depositing into an account.\n"); return;}
+        Date dateInput = createDate(dob, indication);
+        if (dateInput == null) {return;}
+        String depositAmountTxt = amount.getText(); if (depositAmountTxt.isEmpty()) {textArea.appendText("Missing data for depositing into an account.\n"); return;}
         double depositAmount = checkBalance(depositAmountTxt, "Deposit");
         if (depositAmount <= 0) return;
 
         if (checking2.isSelected()) {
-            createChecking(new Profile(firstName, lastName, dob), depositAmount, DEPOSIT_INDICATION);
+            createChecking(new Profile(firstName, lastName, dateInput), depositAmount, DEPOSIT_INDICATION);
         } else if (savings2.isSelected()) {
-            createSavings(new Profile(firstName, lastName, dob),depositAmount,false, DEPOSIT_INDICATION);
+            createSavings(new Profile(firstName, lastName, dateInput),depositAmount,false, DEPOSIT_INDICATION);
         } else if (collegeChecking2.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),depositAmount, banktransactionsgui1.Campus.NEW_BRUNSWICK, DEPOSIT_INDICATION);
+            createCollegeChecking(new Profile(firstName, lastName, dateInput),depositAmount, banktransactionsgui1.Campus.NEW_BRUNSWICK, DEPOSIT_INDICATION);
         } else if (moneyMarket2.isSelected()) {
-            createMoneyMarket(new Profile(firstName, lastName, dob),depositAmount, DEPOSIT_INDICATION);
+            createMoneyMarket(new Profile(firstName, lastName, dateInput),depositAmount, DEPOSIT_INDICATION);
+        }
+        else {
+            textArea.appendText("Missing data for depositing into an account.\n");
         }
     }
 
     @FXML
     void withdraw() {
-        String firstName = firstName2.getText();
-        String lastName = lastName2.getText();
-        Date dob = new Date(dob2.getEditor().getText());
-        String withdrawAmtTxt = amount.getText();
+        String firstName = firstName2.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for withdrawing from an account.\n"); return;}
+        String lastName = lastName2.getText(); if (lastName.isEmpty()) {textArea.appendText("Missing data for withdrawing from an account.\n"); return;}
+        int indication = 0;
+        String dob = dob2.getEditor().getText(); if (dob.isEmpty()) {textArea.appendText("Missing data for withdrawing from an account.\n"); return;}
+        Date dateInput = createDate(dob, indication);
+        if (dateInput == null) {return;}
+        String withdrawAmtTxt = amount.getText(); if (withdrawAmtTxt.isEmpty()) {textArea.appendText("Missing data for depositing into an account.\n"); return;}
 
-        if (dob.isValid() == 2) {
-            textArea.appendText("DOB invalid: " + dob + " cannot be today or a future day.\n");
-            return;
-        }
         double withdrawAmt = checkBalance(withdrawAmtTxt, "Withdraw");
         if (withdrawAmt <= 0) return;
 
         if (checking2.isSelected()) {
-            createChecking(new Profile(firstName, lastName, dob), withdrawAmt, WITHDRAW_INDICATION);
+            createChecking(new Profile(firstName, lastName, dateInput), withdrawAmt, WITHDRAW_INDICATION);
         } else if (savings2.isSelected()) {
-            createSavings(new Profile(firstName, lastName, dob),withdrawAmt,false,WITHDRAW_INDICATION);
+            createSavings(new Profile(firstName, lastName, dateInput),withdrawAmt,false,WITHDRAW_INDICATION);
         } else if (collegeChecking2.isSelected()) {
-            createCollegeChecking(new Profile(firstName, lastName, dob),withdrawAmt, banktransactionsgui1.Campus.NEW_BRUNSWICK,WITHDRAW_INDICATION);
+            createCollegeChecking(new Profile(firstName, lastName, dateInput),withdrawAmt, banktransactionsgui1.Campus.NEW_BRUNSWICK,WITHDRAW_INDICATION);
         } else if (moneyMarket2.isSelected()) {
-            createMoneyMarket(new Profile(firstName, lastName, dob),withdrawAmt,WITHDRAW_INDICATION);
+            createMoneyMarket(new Profile(firstName, lastName, dateInput),withdrawAmt,WITHDRAW_INDICATION);
+        }
+        else {
+            textArea.appendText("Missing data for withdrawing from an account.\n");
         }
     }
 
@@ -394,11 +413,11 @@ public class TransactionManagerController {
         double balance;
         try { balance = Double.parseDouble(token[4]);
         } catch (Exception e) {
-            System.out.println("Not a valid amount.");
+            textArea.appendText("Not a valid amount.\n");
             return;
         }
         if (balance <= 0) {
-            System.out.println("Initial deposit cannot be 0 or negative.");
+            textArea.appendText("Initial deposit cannot be 0 or negative.\n");
             return;
         }
         if (key == 1)
@@ -406,7 +425,7 @@ public class TransactionManagerController {
         if (key == 2) {
             String phraseLoc = checkCampusCode(Integer.parseInt(token[5]));
             if (phraseLoc.equals("INVALID")) {
-                System.out.println("Invalid campus code.");
+                textArea.appendText("Invalid campus code.\n");
             }
             else createCollegeChecking(addProfile, balance, banktransactionsgui1.Campus.valueOf(phraseLoc), OPEN_INDICATION);
         }
@@ -439,8 +458,16 @@ public class TransactionManagerController {
         }
     }
 
-    private Date createDate(String date,int collegeIndication){
-        Date addDate = new Date(date);
+    private Date createDate(String date,int collegeIndication) {
+        Date addDate;
+        try {
+            addDate = new Date(date);
+        }
+        catch (Exception e) {
+            textArea.appendText("Not a valid input for date!\n");
+            return null;
+
+        }
         if(addDate.isValid() == INVALID_DATE){
             textArea.appendText("DOB invalid: " + date + " not a valid calendar date!\n");
             return null;
@@ -472,5 +499,4 @@ public class TransactionManagerController {
     void printFeesAndInterests() {
         accountDatabase.printFeesAndInterests(textArea);
     }
-
 }

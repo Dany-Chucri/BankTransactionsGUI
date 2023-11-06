@@ -210,7 +210,7 @@ public class AccountDatabase {
         for(int i = 0; i < numAcct; i++){
             textArea.appendText(accounts[i].toString() + "\n");
         }
-        textArea.appendText("*end of list.\n");
+        textArea.appendText("*end of list.\n\n");
     } // sort by account type and profile, then print
 
     /**
@@ -278,7 +278,7 @@ public class AccountDatabase {
             String interestString = formatter.format(interest);
             textArea.appendText(accounts[i].toString() + "::fee " + feeString + "::monthly interest " + interestString + "\n");
         }
-        textArea.appendText("*end of list.\n");
+        textArea.appendText("*end of list.\n\n");
     } //calculate interests/fees, then print
 
     /**
@@ -301,6 +301,6 @@ public class AccountDatabase {
             }
             textArea.appendText(accounts[i].toString() + "\n");
         }
-        textArea.appendText("*end of list.\n");
+        textArea.appendText("*end of list.\n\n");
     } //apply the interests/fees, then print
 }

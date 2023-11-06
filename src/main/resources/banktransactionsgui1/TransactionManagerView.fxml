@@ -136,7 +136,7 @@
                                 </GridPane.margin>
                             </RadioButton>
                             <RadioButton fx:id="moneyMarket1" mnemonicParsing="false"
-                                         onAction="#enableLoyalty" text="Money Market"
+                                         onAction="#disableLoyalty" text="Money Market"
                                          toggleGroup="$AccountType1" GridPane.columnIndex="1"
                                          GridPane.rowIndex="1">
                                 <GridPane.margin>
