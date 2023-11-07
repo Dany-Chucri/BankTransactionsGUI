@@ -11,10 +11,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+/**
+ * Controller for the graphical user interface to process input for the Account Database.
+ * Runs via "TransactionManagerMain".
+ * @author Dany Chucri, Madhur Nutulapati
+ */
 public class TransactionManagerController {
 
     private final AccountDatabase accountDatabase; // The Database structure to hold bank accounts
 
+    /**
+     * Instantiates the TransactionManager using Account Database.
+     */
     public TransactionManagerController() {
         this.accountDatabase = new AccountDatabase();
     }
@@ -26,28 +34,32 @@ public class TransactionManagerController {
     private static final int INVALID_DATE = 1;
     private static final int NO_TODAY_NO_FUTURE = 2;
 
-    @FXML
-    private TextArea textArea;
 
     @FXML
-    private ToggleGroup AccountType1, AccountType2, Campus;
+    private TextArea textArea; // The output text area of the GUI.
 
     @FXML
-    private Group campuses;
+    private ToggleGroup AccountType1, AccountType2, Campus; // Toggle groups for radio buttons.
 
     @FXML
-    private TextField firstName1, lastName1, initialDeposit, firstName2, lastName2, amount;
+    private Group campuses; // Campuses radio button group.
 
     @FXML
-    private DatePicker dob1, dob2;
+    private TextField firstName1, lastName1, initialDeposit, firstName2, lastName2, amount; // Text Fields for inputting data.
+
+    @FXML
+    private DatePicker dob1, dob2; // Date fields for both tabs.
 
     @FXML
     private RadioButton checking1, checking2, savings1, savings2, collegeChecking1, collegeChecking2,
-            moneyMarket1, moneyMarket2, camden, nb, newark;
+            moneyMarket1, moneyMarket2, camden, nb, newark; // Various radio buttons.
 
     @FXML
-    private CheckBox loyalty;
+    private CheckBox loyalty; // Checkbox for a loyal customer on the Open/Close tab.
 
+    /**
+     * Clears inputs from the Open/Close tab.
+     */
     @FXML
     void clearFirst() {
         firstName1.clear();
@@ -63,6 +75,9 @@ public class TransactionManagerController {
         newark.setDisable(true);
     }
 
+    /**
+     * Clears inputs from the Deposit/Withdraw tab.
+     */
     @FXML
     void clearSecond() {
         firstName2.clear();
@@ -75,36 +90,69 @@ public class TransactionManagerController {
         moneyMarket2.setSelected(false);
     }
 
+    /**
+     * Enables the "Loyal Customer" option.
+     * Also disables the "Campus" group.
+     */
     @FXML
     void enableLoyalty() {
         if (loyalty.isDisabled()) {
             loyalty.setDisable(false);
         }
-        disableCampus();
-    }
-
-    @FXML
-    void disableLoyalty() {
-        if (!loyalty.isDisabled()) {
-            loyalty.setDisable(true);
-        }
-        disableCampus();
-    }
-
-    @FXML
-    void enableCampus() {
-        if (campuses.isDisabled()) {
-            campuses.setDisable(false);
-        }
-    }
-
-    @FXML
-    void disableCampus() {
         if (!campuses.isDisabled()) {
             campuses.setDisable(true);
         }
     }
 
+    /**
+     * Disables the "Loyal Customer" option.
+     * Also disables the "Campus" group.
+     */
+    @FXML
+    void disableLoyalty() {
+        if (!loyalty.isDisabled()) {
+            loyalty.setDisable(true);
+        }
+        if (!campuses.isDisabled()) {
+            campuses.setDisable(true);
+        }
+    }
+
+
+    /**
+     * Enables the "Campus" group.
+     * Also disables the "Loyal Customer" option.
+     */
+    @FXML
+    void enableCampus() {
+        if (campuses.isDisabled()) {
+            campuses.setDisable(false);
+        }
+        if (!loyalty.isDisabled()) {
+            loyalty.setDisable(true);
+        }
+    }
+
+    /**
+     * Disables the "Campus" group.
+     * Also disables the "Loyal Customer" option.
+     */
+    @FXML
+    void disableCampus() {
+        if (!campuses.isDisabled()) {
+            campuses.setDisable(true);
+        }
+        if (!loyalty.isDisabled()) {
+            loyalty.setDisable(true);
+        }
+    }
+
+    /**
+     To create Checking object to perform the respective operation of opening,closing, depositing, or withdrawing.
+     @param addProfile the Profile object
+     @param balance The user balance information
+     @param operation Indicates either open, close, Deposit, or Withdraw
+     */
     @FXML
     private void createChecking(Profile addProfile,double balance,int operation){
         Checking addAccount = new Checking(addProfile,balance);
@@ -141,6 +189,13 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     To create Savings object to perform the respective operation of opening,closing, depositing, or withdrawing.
+     @param addProfile the Profile object
+     @param balance The user balance information
+     @param loyal indicating whether holder is Loyal or not. 1 Being loyal and otherwise being not loyal.
+     @param operation Indicates either open, close, Deposit, or Withdraw
+     */
     @FXML
     private void createSavings(Profile addProfile,double balance, boolean loyal, int operation){
         Savings addAccount = new Savings(addProfile, balance, loyal);
@@ -176,6 +231,13 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     To create College Checking object to perform the respective operation of opening,closing, depositing, or withdrawing.
+     @param addProfile the Profile object
+     @param balance The user balance information
+     @param code The campus code - > 0 - New Brunswick; 1 - Newark ; 2 - Camden
+     @param operation Indicates either open, close, Deposit, or Withdraw
+     */
     @FXML
     private void createCollegeChecking(Profile addProfile,double balance, Campus code,int operation){
         CollegeChecking addAccount = new CollegeChecking(addProfile,balance,code);
@@ -212,6 +274,12 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     To create Money Market object to perform the respective operation of opening,closing, depositing, or withdrawing.
+     @param addProfile the Profile object
+     @param balance The user balance information
+     @param operation Indicates either open, close, Deposit, or Withdraw
+     */
     @FXML
     private void createMoneyMarket(Profile addProfile,double balance,int operation){
         MoneyMarket addAccount = new MoneyMarket(addProfile,balance);
@@ -250,6 +318,11 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Will check the validity of a balance when called.
+     * @param token An array of tokens from the command-line arguments.
+     * @param type deposit or withdrawal
+     */
     private double checkBalance(String token, String type) {
         double balanceAmount;
         try {
@@ -268,6 +341,9 @@ public class TransactionManagerController {
         return balanceAmount;
     }
 
+    /**
+     * Opens an account based on the inputs provided in the Open/Close tab.
+     */
     @FXML
     void open() {
         String firstName = firstName1.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for opening an account.\n"); return;}
@@ -291,7 +367,7 @@ public class TransactionManagerController {
             boolean isLoyal = loyalty.isSelected();
             createSavings(new Profile(firstName, lastName, dateInput),initialDeposit,isLoyal,OPEN_INDICATION);
         } else if (collegeChecking1.isSelected()) {
-            RadioButton selectedRadioButton = (RadioButton) Campus.getSelectedToggle();
+            RadioButton selectedRadioButton = (RadioButton) Campus.getSelectedToggle(); if (selectedRadioButton == null) {textArea.appendText("You must select a campus.\n"); return;}
             String campusText = selectedRadioButton.getText();
             banktransactionsgui1.Campus campus = switch (campusText) {
                 case "NB" -> banktransactionsgui1.Campus.NEW_BRUNSWICK;
@@ -308,6 +384,9 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Closes an account based on the inputs provided in the Open/Close tab.
+     */
     @FXML
     void close() {
         String firstName = firstName1.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for closing an account.\n"); return;}
@@ -331,6 +410,9 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Deposits into an account based on the inputs provided in the Deposit/Withdraw tab.
+     */
     @FXML
     void deposit() {
         String firstName = firstName2.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for depositing into an account.\n"); return;}
@@ -357,6 +439,9 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Withdraws from an account based on the inputs provided in the Deposit/Withdraw tab.
+     */
     @FXML
     void withdraw() {
         String firstName = firstName2.getText(); if (firstName.isEmpty()) {textArea.appendText("Missing data for withdrawing from an account.\n"); return;}
@@ -384,6 +469,12 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Loads a list of accounts to be inputted into the Account Database automatically.
+     * This provided text file must be written according to the specifications of "bankAccounts.txt".
+     * Performs minimal error checking as requested by the specifications.
+     * @throws FileNotFoundException When a provided file does not exist or is inaccessible.
+     */
     @FXML
     void loadAccountsFromFile() throws FileNotFoundException {
         FileChooser chooser = new FileChooser();
@@ -409,6 +500,12 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Helper method for loadAccountsFromFile().
+     * @param token A line of tokens read from the input file.
+     * @param key An indication of the bank account type.
+     * @param addProfile Profile object to create an instance of Account with.
+     */
     private void loaderOpener(String[] token, int key, Profile addProfile) {
         double balance;
         try { balance = Double.parseDouble(token[4]);
@@ -435,6 +532,11 @@ public class TransactionManagerController {
             createSavings(addProfile, balance, !(Integer.parseInt(token[5]) == 0), OPEN_INDICATION);
     }
 
+    /**
+     Helper method to retrieve the type of bank, given the token string entry
+     @param entry String entry of the token.
+     @return int 1 - for checking; 2 for College checking; 3 for Money Market; 4 for Savings
+     */
     private int bankType(String entry) {
         return switch (entry) {
             case "C" -> 1;
@@ -445,6 +547,11 @@ public class TransactionManagerController {
         };
     }
 
+    /**
+     Helper method to give us the respective phrase for the enum Campus class.
+     @param campCode 0-New Brunswick; 1-Newark;2-Camden
+     @return string returning the phrase for the respective campCode integer
+     */
     private String checkCampusCode(int campCode){
         if(campCode==0){
             return "NEW_BRUNSWICK";
@@ -458,6 +565,13 @@ public class TransactionManagerController {
         }
     }
 
+    /**
+     * Instantiates a Date object to be used for the creation of an Account.
+     * Performs error checks on the validity of a date.
+     * @param date A String token in the form of "xx/xx/xxxx".
+     * @param collegeIndication indicates whether it is a college checking account to perform age check.
+     * @return The Date object to be used.
+     */
     private Date createDate(String date,int collegeIndication) {
         Date addDate;
         try {
@@ -484,17 +598,27 @@ public class TransactionManagerController {
         return addDate;
     }
 
+    /**
+     * Prints sorted accounts from accountDatabase
+     */
     @FXML
     void printSorted() {
         accountDatabase.printSorted(textArea);
 
     }
 
+    /**
+     * Updates the information of accounts in the database based on their fees and interests.
+     * Then prints the updated Account Database.
+     */
     @FXML
     void printUpdatedBalances() {
         accountDatabase.printUpdatedBalances(textArea);
     }
 
+    /**
+     * Prints the monthly fees and interest rates of the accounts in the database.
+     */
     @FXML
     void printFeesAndInterests() {
         accountDatabase.printFeesAndInterests(textArea);

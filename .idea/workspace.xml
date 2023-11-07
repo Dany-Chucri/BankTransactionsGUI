@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="061fa8e1-bf10-47d5-b4f4-a716bdc99969" name="Changes" comment="Fixes and bugs">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="061fa8e1-bf10-47d5-b4f4-a716bdc99969" name="Changes" comment="Resolution alterations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/banktransactionsgui1/TransactionManagerView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/banktransactionsgui1/TransactionManagerView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/banktransactionsgui1/TransactionManagerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/banktransactionsgui1/TransactionManagerController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,7 +71,20 @@
       <recent name="banktransactionsgui1" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TransactionManagerMain">
+    <configuration name="TransactionManagerMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="banktransactionsgui1.TransactionManagerMain" />
+      <module name="BankTransactionsGUI" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="banktransactionsgui1.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="DateTest.invalid_Calendar_Month_Returns_1" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="BankTransactionsGUI" />
       <extension name="coverage">
@@ -91,6 +103,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TransactionManagerMain" />
         <item itemvalue="JUnit.DateTest.invalid_Calendar_Month_Returns_1" />
       </list>
     </recent_temporary>
@@ -176,7 +189,15 @@
       <option name="project" value="LOCAL" />
       <updated>1699215572588</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Resolution alterations">
+      <option name="closed" value="true" />
+      <created>1699317099128</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1699317099128</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -201,6 +222,7 @@
     <MESSAGE value="Fixes and bugs, restructure" />
     <MESSAGE value="Fixes and bugs" />
     <MESSAGE value="Fixes and bugs. Implemented Loader" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes and bugs. Implemented Loader" />
+    <MESSAGE value="Resolution alterations" />
+    <option name="LAST_COMMIT_MESSAGE" value="Resolution alterations" />
   </component>
 </project>
